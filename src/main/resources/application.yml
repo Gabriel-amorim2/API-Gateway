@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+
+        - id: auth-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/auth/**
+
+        - id: accounts-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/accounts/**, /transfers/**
+
+        - id: cards-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/cards/**
+
+    httpclient:
+      connect-timeout: 5s
+      response-timeout: 5s
+
+api:
+  security:
+    token: ${JWT_SECRET:my-secret-key}
